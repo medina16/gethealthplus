@@ -32,41 +32,12 @@ include('koneksi.php');
                     <td><?php echo $row['email_user']; ?></td>
                     <td><?php echo $row['password_user']; ?></td>
                     <td><?php echo $row['telp_user']; ?></td>
-                    <td><a href="delete_user.php?id_user=<?php echo $row['id_user']; ?>">Delete</a></td>
                 </tr>
                 <?php
             }
             ?>
         </table>
         </br>
-
-        <h2>Cabang</h2>
-        <table border="1">
-            <tr>
-                <th>ID</th>
-                <th>Nama cabang</th>
-                <th>No.telp</th>
-                <th>Provinsi</th>
-                <th>Kota/Kabupaten</th>
-                <th>Detail alamat</th>
-            </tr>
-            <?php
-            $query = mysqli_query($koneksi,"SELECT * FROM cabang");
-            while($row = mysqli_fetch_array($query))
-            {
-                ?>
-                <tr>
-                    <td><?php echo $row['id_cabang']; ?></td>
-                    <td><?php echo $row['nama_cabang']; ?></td>
-                    <td><?php echo $row['telp_cabang']; ?></td>
-                    <td><?php echo $row['provinsi_cabang']; ?></td>
-                    <td><?php echo $row['kotkab_cabang']; ?></td>
-                    <td><?php echo $row['detailalamat_cabang']; ?></td>
-                </tr>
-                <?php
-            }
-            ?>
-        </table>
 
         <h2>Golongan</h2>
         <table border="1">
