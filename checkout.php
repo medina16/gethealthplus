@@ -1,5 +1,6 @@
 <?php
 include('koneksi.php');
+
 session_start();
 	if($_SESSION['id_user']!=NULL){
 		$iduser = $_SESSION["id_user"]; 
@@ -13,7 +14,7 @@ if(isset($_POST['pesan']))
     var_dump($_POST);
 
 
-    mysqli_query($koneksi,"INSERT into pesanan (id_user,id_alamat,status_pesanan) VALUES('$iduser','$id_alamat','WIT')");
+    mysqli_query($koneksi,"INSERT into pesanan (id_user,id_alamat,status_pesanan) VALUES('$iduser','$id_alamat',0)");
 
     $x = 0;
     while (count($_POST["produk_pesanan"])!=$x) {
