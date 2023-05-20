@@ -115,7 +115,10 @@ session_start();
                     <td style="vertical-align: top;"><?php echo $row['jumlah']; ?> <?php echo $infoproduk['jenis_satuan']; ?></td>
                     <td style="vertical-align: top;"><?php echo $row['jumlah']*$infoproduk['harga_produk']; ?></td>
                     <?php $total = $total + $row['jumlah']*$infoproduk['harga_produk']; ?>
-                    <td><a href="delete_darikeranjang.php?id_produk=<?php echo $row['id_produk']; ?>">Delete</a></li></td>
+                    <td>
+                        <!--<input type="checkbox" name="favorit_alamat" value="1" checked></br>-->
+                        <a href="delete_darikeranjang.php?id_produk=<?php echo $row['id_produk']; ?>">Delete</a></li>
+                    </td>
                 </tr>
                 <?php
             }
@@ -150,7 +153,12 @@ session_start();
                     <td style="vertical-align: top;">
                         <?php echo $row['id_pesanan']; ?></br>
                         <?php echo $row['timestamp_pesanan']; ?></br>
-                        <?php echo $row['status_pesanan']; ?></br>
+                        <?php 
+                        if($row['status_pesanan']==0) echo "Diproses";
+                        else if($row['status_pesanan']==1) echo "Dikirim";
+                        else if($row['status_pesanan']==2) echo "Selesai";
+                        else if($row['status_pesanan']==3) echo "Batal";
+                         ?></br>
                    </td>
                    <td style="vertical-align: top;">
                 <?php
@@ -164,6 +172,20 @@ session_start();
                     <?php echo $infoproduk['nama_produk']; ?></br>
                     <?php echo $rowproduk['jumlah_pesanan']; ?> <?php echo $infoproduk['jenis_satuan']; ?></br>
                     Rp<?php echo $rowproduk['jumlah_pesanan']*$infoproduk['harga_produk']; ?></br>
+                    <?php if($row['status_pesanan']==2) {
+                        $cekulasan = mysqli_query($koneksi,"SELECT * FROM ulasan WHERE id_user = '$iduser' AND id_pesanan ='$id_pesanan' AND id_produk='$id_produk'");
+                        if(mysqli_num_rows($cekulasan) == 0){
+                            echo "
+                            <form method=post action=form_ulasan.php enctype=multipart/form-data>
+                                <input type=hidden name=id_produk value=$id_produk>
+                                <input type=hidden name=id_pesanan value=$id_pesanan>
+                                <input type=submit value='Beri ulasan' name=ulas />
+                            </form>";
+                        }
+                        else{
+                            echo"<b>Anda sudah membuat ulasan</b>";
+                        }
+                        }?>
                     <?php $total = $total + $rowproduk['jumlah_pesanan']*$infoproduk['harga_produk']; ?></br>
                     <?php
                 }
@@ -175,45 +197,25 @@ session_start();
             }
             ?>
         </table>
+        
 
         <h2>Produk</h2>
-        <table border="1" width="900">
-            <tr>
-                <th></th>
-                <th>Foto</th>
-                <th>Golongan</th>
-                <th>Nama</th>
-                <th>Detail</th>
-                <th>Harga Satuan</th>
-                <th>Perlu resep</th>
-            </tr>
+        <table border="1">
             <?php
             $query = mysqli_query($koneksi,"SELECT * FROM produk");
             while($row = mysqli_fetch_array($query))
             {
                 ?>
                 <tr>
-                    <td style="vertical-align: top;"><a href="tambah_keranjang.php?id_produk=<?php echo $row['id_produk']; ?>">Tambah ke keranjang</a></td>
                     <td style="vertical-align: top;"><img src="image_view_produk.php?id_produk=<?php echo $row['id_produk']; ?>" width="100"/></td>
-                    <td style="vertical-align: top;"><?php echo $row['id_golongan']; ?></td>
-                    <td style="vertical-align: top;"><?php echo $row['nama_produk']; ?></td>
                     <td style="vertical-align: top;">
-                        <b>Deskripsi</b></br>
-                        <?php echo $row['deskripsi_produk']; ?></br>
-                        <b>Indikasi</b></br>
-                        <?php echo $row['indikasi']; ?></br>
-                        <b>Kontraindikasi</b></br>
-                        <?php echo $row['kontraindikasi']; ?></br>
-                        <b>Komposisi</b></br>
-                        <?php echo $row['komposisi']; ?></br>
-                        <b>Aturan pakai</b></br>
-                        <?php echo $row['aturan_pakai']; ?></br>
-                        <b>Efek samping</b></br>
-                        <?php echo $row['efek_samping']; ?></br>
-                        <b>Peringatan dan perhatian</b></br>
-                        <?php echo $row['peringatan_perhatian']; ?>
-                    <td style="vertical-align: top;">Rp<?php echo $row['harga_produk']; ?>/<?php echo $row['jenis_satuan']; ?></td>
-                    <td style="vertical-align: top;"><?php echo $row['perlu_resep']; ?></td>
+                        <a href="detailproduk.php?id_produk=<?php echo $row['id_produk']; ?>"><?php echo $row['nama_produk']; ?></a></br>
+                        Rp<?php echo $row['harga_produk']; ?>/<?php echo $row['jenis_satuan']; ?></br>
+                        <?php
+                        if($row['jumlah_stok']>0) echo "Stok tersedia";
+                        else echo "Stok habis" 
+                        ?>
+                    </td>
                 </tr>
                 <?php
             }
