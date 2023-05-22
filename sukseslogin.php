@@ -200,6 +200,10 @@ session_start();
         
 
         <h2>Produk</h2>
+        <form method=post action=hasil_pencarian.php enctype=multipart/form-data>
+			<input type="text" name="katakunci" placeholder="Ketik nama obat atau keluhan ...">
+			<input type="submit" value="Cari" name="cari" />
+		</form>
         <table border="1">
             <?php
             $query = mysqli_query($koneksi,"SELECT * FROM produk");
